@@ -1,37 +1,34 @@
-//jquery-click-scroll
-//by syamsul'isul' Arifin
+// jQuery Click Scroll
+// By Syamsul'isul' Arifin
 
-var sectionArray = [1, 2, 3, 4, 5, 6];
+$(document).ready(function() {
+    var sectionArray = [1, 2, 3, 4, 5, 6];
 
-$.each(sectionArray, function(index, value){
-          
-     $(document).scroll(function(){
-         var offsetSection = $('#' + 'section_' + value).offset().top - 83;
-         var docScroll = $(document).scrollTop();
-         var docScroll1 = docScroll + 1;
-         
-        
-         if ( docScroll1 >= offsetSection ){
-             $('.navbar-nav .nav-item .nav-link').removeClass('active');
-             $('.navbar-nav .nav-item .nav-link:link').addClass('inactive');  
-             $('.navbar-nav .nav-item .nav-link').eq(index).addClass('active');
-             $('.navbar-nav .nav-item .nav-link').eq(index).removeClass('inactive');
-         }
-         
-     });
-    
-    $('.click-scroll').eq(index).click(function(e){
-        var offsetClick = $('#' + 'section_' + value).offset().top - 83;
-        e.preventDefault();
-        $('html, body').animate({
-            'scrollTop':offsetClick
-        }, 300)
+    // Initialize the first nav link as active
+    $('.navbar-nav .nav-item .nav-link').addClass('inactive');
+    $('.navbar-nav .nav-item .nav-link').eq(0).addClass('active').removeClass('inactive');
+
+    // Scroll event
+    $(document).scroll(function() {
+        var docScroll = $(document).scrollTop() + 1; // Adding 1 to avoid issues with equality
+        $.each(sectionArray, function(index, value) {
+            var offsetSection = $('#section_' + value).offset().top - 83;
+
+            if (docScroll >= offsetSection) {
+                $('.navbar-nav .nav-item .nav-link').removeClass('active').addClass('inactive');
+                $('.navbar-nav .nav-item .nav-link').eq(index).addClass('active').removeClass('inactive');
+            }
+        });
     });
-    
-});
 
-$(document).ready(function(){
-    $('.navbar-nav .nav-item .nav-link:link').addClass('inactive');    
-    $('.navbar-nav .nav-item .nav-link').eq(0).addClass('active');
-    $('.navbar-nav .nav-item .nav-link:link').eq(0).removeClass('inactive');
+    // Click event for scrolling
+    $('.click-scroll').click(function(e) {
+        e.preventDefault();
+        var targetSection = $(this).data('target'); // Assuming you have data-target attributes
+        var offsetClick = $('#' + targetSection).offset().top - 83;
+
+        $('html, body').animate({
+            scrollTop: offsetClick
+        }, 300);
+    });
 });
